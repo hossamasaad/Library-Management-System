@@ -1,0 +1,28 @@
+Book:
+    -> Id int autoincreament
+    -> title varchar(255)
+    -> author varchar(255)
+    -> ISBN varchar(17) unique
+    -> quantity unsignedint
+    -> shelf location varchar(255)
+
+
+Borrower:
+    -> Id int autoincreament
+    -> name varchar(255)
+    -> email varchar(255) unique
+    -> RegisterDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+ 
+
+BorrowerBook
+    -> BorrowerId int forigenkey
+    -> BookId int forigenkey
+    -> composit PrimaryKey
+    -> dueDates TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
+
+User
+    -> id
+    -> UserType(Admin, SystemUser)
+    -> username
+    -> password
