@@ -18,9 +18,13 @@ const BorrowerBook = sequelize.define('BorrowerBook', {
             key: 'Id'
         }
     },
-    dueDates: {
+    dueDate: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW
+    },
+    returned: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
     }
 }, {
     timestamps: false,
