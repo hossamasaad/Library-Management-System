@@ -2,6 +2,7 @@ import config from './config/index.js';
 import express from 'express';
 import { sequelize, connectToDatabase } from './database/database.js';
 import logger from './logger/logger.js';
+import errorHandler from './Error/ErrorHandler.js';
 
 import Book from './models/Book.js';
 import Borrower from './models/Borrower.js';
@@ -12,6 +13,8 @@ const port = config.app.port;
 
 logger.info("Starting the application!")
 const app = express();
+
+app.use(errorHandler);
 
 logger.info("Connecting to database.")
 connectToDatabase();

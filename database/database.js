@@ -1,5 +1,6 @@
 import { Sequelize } from 'sequelize';
 import config from '../config/index.js';
+import logger from '../logger/logger.js';
 
 const sequelize = new Sequelize(config.db.dbName, config.db.user, config.db.password, {
     host: config.db.host,
@@ -10,9 +11,9 @@ const sequelize = new Sequelize(config.db.dbName, config.db.user, config.db.pass
 async function connectToDatabase() {
     try {
         await sequelize.authenticate();        
-        console.log('Connection to MySQL has been established successfully.');
+        logger.info('Connection to MySQL has been established successfully.');
     } catch (error) {
-        console.error('Unable to connect to the database:', error);
+        logger.error('Unable to connect to the database:', error);
     }
 }
 
