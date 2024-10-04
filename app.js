@@ -17,12 +17,10 @@ logger.info("Connecting to database.")
 connectToDatabase();
 
 sequelize.sync().then(() => {
-    console.log('Database & tables created!');
+    logger.info("Database updated.");
 });
 
 
-
-
 app.listen(port, () => {
-    console.log(`The server is running on port ${port}...`);
+    logger.info(`The server is running on port ${port}...`);
 });
