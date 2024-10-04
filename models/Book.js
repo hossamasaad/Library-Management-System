@@ -28,6 +28,18 @@ const Book = sequelize.define('Book', {
         type: DataTypes.STRING(255),
         allowNull: true
     }
+}, {
+    indexes: [
+        {
+            fields: ['title']
+        },
+        {
+            fields: ['author']
+        },
+        {
+            fields: ['ISBN']
+        },
+    ]
 });
 
 export default Book;
