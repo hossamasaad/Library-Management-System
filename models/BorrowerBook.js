@@ -4,15 +4,17 @@ import Borrower from './Borrower.js';
 import Book from './Book.js';
 
 const BorrowerBook = sequelize.define('BorrowerBook', {
-    BorrowerId: {
+    borrowerId: {
         type: DataTypes.INTEGER,
+        primaryKey: true,
         references: {
             model: Borrower,
             key: 'Id'
         }
     },
-    BookId: {
+    bookId: {
         type: DataTypes.INTEGER,
+        primaryKey: true,
         references: {
             model: Book,
             key: 'Id'

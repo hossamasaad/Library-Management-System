@@ -1,21 +1,28 @@
+import { Op } from "sequelize";
 import NotFoundError from "../Error/NotFoundError.js";
 import BorrowerBook from "../models/BorrowerBook.js";
 
 
 async function checkoutBook(borrowerId, bookId, dueDate) {
     const returned = false;
-    const details = await BorrowerBook.add({ borrowerId, bookId, dueDate, returned });
+    const details = await BorrowerBook.create({ borrowerId, bookId, dueDate, returned });
     return details;
 }
 
 async function returnBook(borrowerId, bookId) {
-    var borrowerBook = BorrowerBook.findByPk({borrowerId, bookId})
+    const borrowerBook = await BorrowerBook.findOne({
+        where: {
+            BorrowerId: borrowerId,
+            BookId: bookId
+        }
+    });
     if (!borrowerBook) {
         throw new NotFoundError("There is no borrowed books with this id " + id);
     }
     borrowerBook.returned = true;
-    const details = await BorrowerBook.update(borrowerBook);
-    return details;
+    await borrowerBook.save();
+
+    return borrowerBook;
 }
 
 async function getAllBorrowerBooks(borrowerId) {

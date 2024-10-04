@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { check } from "express-validator";
 import BorrowerBookController from "../controllers/BorrowerBookController.js";
+import RateLimiter from "../middlewares/RateLimiter.js";
 
 const borrowerBookRouter = Router();
 
@@ -18,22 +19,27 @@ await borrowerBookRouter.post('/checkout', [
         }
         return true;
     })
-], BorrowerBookController.checkoutBook)
-
+],
+    RateLimiter.checkoutLimiter,
+    BorrowerBookController.checkoutBook
+);
 
 await borrowerBookRouter.post('/return', [
         check('borrowerId').isInt({ gt: 0 }).withMessage('Borrower ID must be a valid id'),
         check('bookId').isInt({ gt: 0 }).withMessage('Book ID must be a valid id'),
     ],
+    RateLimiter.returnLimiter,
     BorrowerBookController.returnBook
-)
+);
+
+
+await borrowerBookRouter.get('/overdue', 
+    BorrowerBookController.getAllOverdueBooks
+);
 
 await borrowerBookRouter.get('/:id', [
     check('id').isInt({ gt: 0 }).withMessage('Id must be a valid id'),
 ], BorrowerBookController.getAllBorrowerBooks);
 
-await borrowerBookRouter.get('/overdue', 
-    BorrowerBookController.getAllOverdueBooks
-);
 
 export default borrowerBookRouter;
