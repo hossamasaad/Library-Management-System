@@ -16,7 +16,11 @@ const Borrower = sequelize.define('Borrower', {
         unique: true,
         allowNull: false
     },
-    RegisterDate: {
+    password: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    registerDate: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW
     }

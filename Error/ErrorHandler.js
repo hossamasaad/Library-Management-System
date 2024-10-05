@@ -1,6 +1,7 @@
 import { DatabaseError, ValidationError } from "sequelize";
 import logger from "../logger/logger.js";
 import NotFoundError from "./NotFoundError.js";
+import LoginError from "./LoginError.js";
 
 
 const errorHandler = (err, req, res, next) => {
@@ -13,9 +14,9 @@ const errorHandler = (err, req, res, next) => {
     } 
     else if (err instanceof DatabaseError) {
         statusCode = 500;
-        message = 'Database operation failed. Please try again later.';
+        message = err.message;
     }
-    else if (err instanceof NotFoundError) {
+    else {
         statusCode = err.statusCode;
         message = err.message
     }
