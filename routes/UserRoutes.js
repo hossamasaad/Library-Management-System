@@ -2,6 +2,7 @@ import { Router } from "express";
 import { check } from "express-validator";
 import UserController from "../controllers/UserController.js";
 import jwt from "../middlewares/jwt.js";
+import validateInput from "../middlewares/validateInput.js";
 
 
 const userRouter = Router();
@@ -10,7 +11,10 @@ const userRouter = Router();
 await userRouter.post('/auth', [
     check('username').notEmpty().withMessage('Name is required'),
     check('password').notEmpty().withMessage('Password is required ')
-], UserController.authenticateUser);
+], 
+    validateInput,
+    UserController.authenticateUser
+);
 
 
 await userRouter.post('/add_user', [
@@ -19,6 +23,7 @@ await userRouter.post('/add_user', [
 ], 
     jwt.authenticateJWT,
     jwt.authorizeUserTypes(['Admin']),
+    validateInput,
     UserController.addUser
 );
 

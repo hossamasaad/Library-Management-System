@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { check } from 'express-validator';
 import BookController from '../controllers/BookController.js';
 import jwt from '../middlewares/jwt.js';
+import validateInput from '../middlewares/validateInput.js';
 
 const bookRouter = Router();
 
@@ -21,6 +22,7 @@ await bookRouter.post('/',[
 ], 
     jwt.authenticateJWT,
     jwt.authorizeUserTypes(['Admin', 'SystemUser']),
+    validateInput,
     BookController.addBook
 )
 
@@ -34,6 +36,7 @@ await bookRouter.put('/:id',[
 ], 
     jwt.authenticateJWT,
     jwt.authorizeUserTypes(['Admin', 'SystemUser']),
+    validateInput,
     BookController.updateBook
 )
 
@@ -41,12 +44,14 @@ await bookRouter.delete('/:id',
     [check('id').isInt({ gt: 0 }).withMessage('Book ID must be a valid id')],
     jwt.authenticateJWT,
     jwt.authorizeUserTypes(['Admin']),
+    validateInput,
     BookController.deleteBook
 );
 
 await bookRouter.get('/',
     jwt.authenticateJWT,
     jwt.authorizeUserTypes(['Admin', 'SystemUser']),
+    validateInput,
     BookController.getAllBooks
 );
 
@@ -54,6 +59,7 @@ await bookRouter.get('/search/:text',
     check('text').notEmpty().withMessage('text is required'),
     jwt.authenticateJWT,
     jwt.authorizeUserTypes(['Admin', 'SystemUser', 'Borrower']),
+    validateInput,
     BookController.searchBooks
 );
 

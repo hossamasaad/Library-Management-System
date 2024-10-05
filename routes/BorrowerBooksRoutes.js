@@ -3,6 +3,7 @@ import { check } from "express-validator";
 import BorrowerBookController from "../controllers/BorrowerBookController.js";
 import RateLimiter from "../middlewares/RateLimiter.js";
 import jwt from "../middlewares/jwt.js";
+import validateInput from "../middlewares/validateInput.js";
 
 const borrowerBookRouter = Router();
 
@@ -24,6 +25,7 @@ await borrowerBookRouter.post('/checkout', [
     RateLimiter.checkoutLimiter,
     jwt.authenticateJWT,
     jwt.authorizeUserTypes(['Admin', 'SystemUser', 'Borrower']),
+    validateInput,
     BorrowerBookController.checkoutBook
 );
 
@@ -34,6 +36,7 @@ await borrowerBookRouter.post('/return', [
     RateLimiter.returnLimiter,
     jwt.authenticateJWT,
     jwt.authorizeUserTypes(['Admin', 'SystemUser', 'Borrower']),
+    validateInput,
     BorrowerBookController.returnBook
 );
 
@@ -41,6 +44,7 @@ await borrowerBookRouter.post('/return', [
 await borrowerBookRouter.get('/overdue', 
     jwt.authenticateJWT,
     jwt.authorizeUserTypes(['Admin', 'SystemUser', 'Borrower']),
+    validateInput,
     BorrowerBookController.getAllOverdueBooks
 );
 
@@ -49,6 +53,7 @@ await borrowerBookRouter.get('/:id', [
 ], 
     jwt.authenticateJWT,
     jwt.authorizeUserTypes(['Admin', 'SystemUser', 'Borrower']),
+    validateInput,
     BorrowerBookController.getAllBorrowerBooks
 );
 
