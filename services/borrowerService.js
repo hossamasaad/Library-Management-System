@@ -1,7 +1,9 @@
+import bcrypt from "bcryptjs/dist/bcrypt.js";
 import config from "../config/index.js";
 import LoginError from "../Error/LoginError.js";
 import NotFoundError from "../Error/NotFoundError.js";
 import Borrower from "../models/Borrower.js";
+import jwt from 'jsonwebtoken';
 
 
 async function authenticateBorrower(email, password) {
@@ -14,7 +16,7 @@ async function authenticateBorrower(email, password) {
     if (!borrower || !(await bcrypt.compare(password, borrower.password))) {
         throw new LoginError('Invalid email or password');
     }
-    const token = jwt.sign({ id: borrower.id }, config.app.jwt_secret, { expiresIn: '1h' });
+    const token = jwt.sign({ id: borrower.id, userType: "Borrower" }, config.app.jwt_secret, { expiresIn: '1h' });
     return { borrower, token };
 }
 

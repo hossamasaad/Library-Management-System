@@ -1,5 +1,13 @@
 # Library Management System
 
+# How to start the application
+
+1. Run MySQL
+
+    ```bash
+    docker run --name MYSQL_LIBRARY_SYSTEM -e MYSQL_ROOT_PASSWORD=123 -p 3306:3306 -d mysql:latest
+    ```
+
 
 ## Assumptions
 
@@ -12,16 +20,20 @@ Here I will make some assumptions for the system
 3. ISBN-13 (need 17 chars, 4 hyphens) e.g. 789-0-12-999111-2
 4. Shelf Location will user varchar for simplicity
 
-# Database Schema
 
+
+## Database Schema
 ![Database Schema](assets/schema.png)
+-> need update
+-> add indexes
+
+## Project structure
 
 
+## Implementation
 
-# How To Run the application
-
-1. Run MySQL
-
-    ```bash
-    docker run --name MYSQL_LIBRARY_SYSTEM -e MYSQL_ROOT_PASSWORD=123 -p 3306:3306 -d mysql:latest
-    ```
+### SQL Injection
+### JWT
+### Error handler
+### Logger
+### RateLimitting

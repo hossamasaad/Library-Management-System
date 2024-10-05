@@ -7,7 +7,7 @@ const User = sequelize.define('User', {
         autoIncrement: true,
         primaryKey: true
     },
-    UserType: {
+    userType: {
         type: DataTypes.ENUM('Admin', 'SystemUser'),
         allowNull: false
     },

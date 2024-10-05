@@ -1,11 +1,10 @@
-import borrowBookService from "../services/borrowBookService.js";
 import borrowerService from "../services/borrowerService.js";
 
 
 async function authenticateBorrower(req, res, next ) {
     try{
         const { email, password } = req.body;
-        const { borrower, token } = await borrowBookService.authenticateBorrower(email, password);
+        const { borrower, token } = await borrowerService.authenticateBorrower(email, password);
         res.status(200).json({ borrower, token });
     } catch (err) {
         next(err);
@@ -17,7 +16,7 @@ async function registerBorrower(req, res, next) {
     try {
         const { name, email, password } = req.body;
         const registerDate = new Date().toISOString();
-        const registeredBorrower = await borrowBookService.registerBorrower(name, email, password, registerDate);
+        const registeredBorrower = await borrowerService.registerBorrower(name, email, password, registerDate);
         res.status(201).json(registeredBorrower);
     }
     catch (err) {

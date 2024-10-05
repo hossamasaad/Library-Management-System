@@ -16,7 +16,7 @@ const errorHandler = (err, req, res, next) => {
         statusCode = 500;
         message = err.message;
     }
-    else {
+    else if (err instanceof LoginError || err instanceof NotFoundError) {
         statusCode = err.statusCode;
         message = err.message
     }
