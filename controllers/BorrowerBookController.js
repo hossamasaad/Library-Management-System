@@ -44,4 +44,33 @@ async function getAllOverdueBooks(req, res, next) {
     }
 }
 
-export default { checkoutBook, returnBook, getAllBorrowerBooks, getAllOverdueBooks }
+async function exportBorrowProcessesLastMonthToCSV(req, res, next) {
+    try {
+        const borrowProcessesCsv = await borrowBookService.exportBorrowProcessesLastMonthToCSV();
+        
+        res.header('Content-Type', 'text/csv');
+        res.attachment('data.csv');
+        res.send(borrowProcessesCsv);
+    }
+    catch (err) {
+        next(err);
+    }
+}
+
+
+async function exportOverdueBorrowProcessesLastMonthToCSV(req, res, next) {
+    try {
+        const overdueBorrowProcessesCsv = await borrowBookService.exportOverdueBorrowProcessesLastMonthToCSV();
+        
+        res.header('Content-Type', 'text/csv');
+        res.attachment('data.csv');
+        res.send(overdueBorrowProcessesCsv);
+    }
+    catch (err) {
+        next(err);
+    }
+}
+
+
+
+export default { checkoutBook, returnBook, getAllBorrowerBooks, getAllOverdueBooks, exportBorrowProcessesLastMonthToCSV, exportBorrowProcessesLastMonthToCSV, exportOverdueBorrowProcessesLastMonthToCSV }

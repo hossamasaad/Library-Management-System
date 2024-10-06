@@ -2,6 +2,7 @@ import { Op } from "sequelize";
 import NotFoundError from "../Error/NotFoundError.js";
 import BorrowerBook from "../models/BorrowerBook.js";
 import Book from "../models/Book.js";
+import { Parser } from "json2csv";
 
 
 async function checkoutBook(borrowerId, bookId, dueDate) {
@@ -64,5 +65,44 @@ async function getAllOverdueBooks() {
     return overdueBooks; 
 }
 
+async function exportBorrowProcessesLastMonthToCSV() {
+    const lastMonth = new Date();
+    lastMonth.setMonth(lastMonth.getMonth() - 1);
 
-export default { checkoutBook, returnBook, getAllBorrowerBooks, getAllOverdueBooks }
+    const borrowProcesses = await BorrowerBook.findAll({
+        where: {
+            createdAt: {
+                [Op.gte]: lastMonth
+            }
+        }
+    });
+
+    const fields = ['borrowerId', 'bookId', 'dueDate', 'returned', 'createdAt']; 
+    const parser = new Parser({ fields });
+    const csv = parser.parse(borrowProcesses);
+    return csv;
+}
+
+async function exportOverdueBorrowProcessesLastMonthToCSV() {
+    const lastMonth = new Date();
+    lastMonth.setMonth(lastMonth.getMonth() - 1);
+
+    const overdueBorrowProcesses = await BorrowerBook.findAll({
+        where: {
+            returned: false,
+            createdAt: {
+                [Op.gte]: lastMonth
+            },
+            dueDate: {
+                [Op.lt]: new Date()
+            }
+        }
+    });
+
+    const fields = ['borrowerId', 'bookId', 'dueDate', 'returned', 'createdAt']; 
+    const parser = new Parser({ fields });
+    const csv = parser.parse(overdueBorrowProcesses);
+    return csv;
+}
+
+export default { checkoutBook, returnBook, getAllBorrowerBooks, getAllOverdueBooks, exportBorrowProcessesLastMonthToCSV, exportOverdueBorrowProcessesLastMonthToCSV }

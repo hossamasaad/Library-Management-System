@@ -48,6 +48,18 @@ await borrowerBookRouter.get('/overdue',
     BorrowerBookController.getAllOverdueBooks
 );
 
+await borrowerBookRouter.get('/processes',
+    jwt.authenticateJWT,
+    jwt.authorizeUserTypes(['Admin', 'SystemUser', 'Borrower']),
+    BorrowerBookController.exportBorrowProcessesLastMonthToCSV
+);
+
+await borrowerBookRouter.get('/overdue-processes',
+    jwt.authenticateJWT,
+    jwt.authorizeUserTypes(['Admin', 'SystemUser', 'Borrower']),
+    BorrowerBookController.exportOverdueBorrowProcessesLastMonthToCSV
+);
+
 await borrowerBookRouter.get('/:id', [
     check('id').isInt({ gt: 0 }).withMessage('Id must be a valid id'),
 ], 
@@ -56,6 +68,8 @@ await borrowerBookRouter.get('/:id', [
     validateInput,
     BorrowerBookController.getAllBorrowerBooks
 );
+
+
 
 
 export default borrowerBookRouter;

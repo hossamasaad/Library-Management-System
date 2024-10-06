@@ -29,7 +29,6 @@ const BorrowerBook = sequelize.define('BorrowerBook', {
         defaultValue: false
     }
 }, {
-    timestamps: false,
     indexes: [
         {
             unique: true,

@@ -16,7 +16,7 @@ await bookRouter.get('/:id',
 await bookRouter.post('/',[
     check('title').notEmpty().withMessage('Title is required'),
     check('author').notEmpty().withMessage('Author is required'),
-    check('ISBN').isISBN().withMessage('Invalid ISBN'),
+    check('ISBN').notEmpty().withMessage('Invalid ISBN'),
     check('quantity').isInt({ min: 0 }).withMessage('Quantity must be a non-negative integer'),
     check('shelfLocation').optional().isString().withMessage('Shelf Location must be a string')
 ], 
@@ -30,7 +30,7 @@ await bookRouter.put('/:id',[
     check('id').isInt({ gt: 0 }).withMessage('Book ID must be a valid id'),
     check('title').notEmpty().withMessage('Title is required'),
     check('author').notEmpty().withMessage('Author is required'),
-    check('ISBN').isISBN().withMessage('Invalid ISBN'),
+    check('ISBN').notEmpty().withMessage('Invalid ISBN'),
     check('quantity').isInt({ min: 0 }).withMessage('Quantity must be a non-negative integer'),
     check('shelfLocation').optional().isString().withMessage('Shelf Location must be a string')
 ], 

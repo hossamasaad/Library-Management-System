@@ -1,10 +1,11 @@
 import { validationResult } from "express-validator";
+import { ValidationError } from "sequelize";
 
 
 async function validateInput(req, res, next) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+        next(new ValidationError(errors['errors'][0].msg));
     }
     next();
 };
