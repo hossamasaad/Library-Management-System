@@ -2,12 +2,16 @@
 
 # How to start the application
 
-1. Run MySQL
+1. Run the application
 
     ```bash
-    docker run --name MYSQL_LIBRARY_SYSTEM -e MYSQL_ROOT_PASSWORD=123 -p 3306:3306 -d mysql:latest
+    docker compose up --build    
     ```
 
+2. stop the application
+    ```bash
+    docker compose down
+    ```
 
 ## Assumptions
 
