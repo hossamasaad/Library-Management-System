@@ -1,0 +1,1273 @@
+openapi: 3.0.3
+info:
+  title: Library-app
+  version: 1.0.0
+  contact: {}
+servers:
+  - url: localhost
+paths:
+  /api/v1/books/{id}:
+    get:
+      summary: Get book by ID
+      description: Retrieve details of a book by its ID.
+      tags:
+        - Books
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the book to retrieve.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response with book details.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Id:
+                    type: integer
+                    example: 1
+                  title:
+                    type: string
+                    example: "Javascript"
+                  author:
+                    type: string
+                    example: "Hossam"
+                  ISBN:
+                    type: string
+                    example: "978-3-16-148410-0"
+                  quantity:
+                    type: integer
+                    example: 5
+                  shelfLocation:
+                    type: string
+                    example: "A2"
+                  createdAt:
+                    type: string
+                    format: date-time
+                    example: "2024-10-06T00:28:33.000Z"
+                  updatedAt:
+                    type: string
+                    format: date-time
+                    example: "2024-10-06T00:28:36.000Z"
+        '400':
+          description: Invalid token or no token provided.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Invalid Token"
+              examples:
+                invalidToken:
+                  value:
+                    message: "Invalid Token"
+                noTokenProvided:
+                  value:
+                    message: "Access Denied: No Token Provided"
+        '404':
+          description: Book not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  statusCode:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: "There is no books with this id 1"
+      
+      security:
+        - bearerAuth: []
+      
+    
+    put:
+      summary: Update an existing book by ID
+      description: Update the details of an existing book in the collection using its ID.
+      tags:
+        - Books
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the book to update
+          schema:
+            type: integer
+            example: 5
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: "Javascript Book2"
+                quantity:
+                  type: integer
+                  example: 10
+                ISBN:
+                  type: string
+                  example: "789-0-12-999121-3"
+                author:
+                  type: string
+                  example: "Hossam Asaad"
+                shelfLocation:
+                  type: string
+                  example: "A9"
+      responses:
+        '201':
+          description: Book updated successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Id:
+                    type: integer
+                    example: 5
+                  title:
+                    type: string
+                    example: "Javascript Book2"
+                  author:
+                    type: string
+                    example: "Hossam Asaad"
+                  ISBN:
+                    type: string
+                    example: "978-3-16-148410-4"
+                  quantity:
+                    type: integer
+                    example: 10
+                  shelfLocation:
+                    type: string
+                    example: "A5"
+                  createdAt:
+                    type: string
+                    format: date-time
+                    example: "2024-10-05T21:56:34.619Z"
+                  updatedAt:
+                    type: string
+                    format: date-time
+                    example: "2024-10-05T21:56:34.619Z"
+        '400':
+          description: Invalid token, no token provided, or bad request.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                invalidToken:
+                  value:
+                    message: "Invalid Token"
+                noTokenProvided:
+                  value:
+                    message: "Access Denied: No Token Provided"
+                badRequest:
+                  value:
+                    status: error
+                    statusCode: 400
+                    message: Quantity must be a non-negative integer
+                    
+      security:
+        - bearerAuth: []
+    
+    delete:
+      summary: Delete a book by ID
+      operationId: deleteBookById
+      tags:
+        - Books
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the book to delete
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully deleted the book
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Id:
+                    type: integer
+                  title:
+                    type: string
+                  author:
+                    type: string
+                  ISBN:
+                    type: string
+                  quantity:
+                    type: integer
+                  shelfLocation:
+                    type: string
+                  createdAt:
+                    type: string
+                    format: date-time
+                  updatedAt:
+                    type: string
+                    format: date-time
+        '400':
+          description: Invalid Token or Access Denied
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: Book not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  statusCode:
+                    type: integer
+                  message:
+                    type: string
+      security:
+        - bearerAuth: []
+      
+  /api/v1/books:
+    get:
+      summary: Get all books
+      description: Retrieve a list of all books.
+      tags:
+        - Books
+      responses:
+        '200':
+          description: Successful response with a list of books.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    Id:
+                      type: integer
+                      example: 1
+                    title:
+                      type: string
+                      example: "Javascript"
+                    author:
+                      type: string
+                      example: "Hossam"
+                    ISBN:
+                      type: string
+                      example: "978-3-16-148410-0"
+                    quantity:
+                      type: integer
+                      example: 5
+                    shelfLocation:
+                      type: string
+                      example: "A2"
+                    createdAt:
+                      type: string
+                      format: date-time
+                      example: "2024-10-06T00:28:33.000Z"
+                    updatedAt:
+                      type: string
+                      format: date-time
+                      example: "2024-10-06T00:28:36.000Z"
+        '400':
+          description: Invalid token or no token provided.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                invalidToken:
+                  value:
+                    message: "Invalid Token"
+                noTokenProvided:
+                  value:
+                    message: "Access Denied: No Token Provided"
+      security:
+        - bearerAuth: []
+      
+    post:
+      summary: Create a new book
+      description: Add a new book to the collection.
+      tags:
+        - Books
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: "Javascript Book2"
+                quantity:
+                  type: integer
+                  example: 10
+                ISBN:
+                  type: string
+                  example: "789-0-12-999121-3"
+                author:
+                  type: string
+                  example: "Hossam Asaad"
+                shelfLocation:
+                  type: string
+                  example: "A5"
+      responses:
+        '201':
+          description: Book created successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Id:
+                    type: integer
+                    example: 5
+                  title:
+                    type: string
+                    example: "Javascript Book2"
+                  author:
+                    type: string
+                    example: "Hossam Asaad"
+                  ISBN:
+                    type: string
+                    example: "978-3-16-148410-4"
+                  quantity:
+                    type: integer
+                    example: 10
+                  shelfLocation:
+                    type: string
+                    example: "A5"
+                  createdAt:
+                    type: string
+                    format: date-time
+                    example: "2024-10-05T21:56:34.619Z"
+                  updatedAt:
+                    type: string
+                    format: date-time
+                    example: "2024-10-05T21:56:34.619Z"
+        '400':
+          description: Invalid token, no token provided, or bad request.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                invalidToken:
+                  value:
+                    message: "Invalid Token"
+                noTokenProvided:
+                  value:
+                    message: "Access Denied: No Token Provided"
+                badRequest:
+                  value:
+                    status: error
+                    statusCode: 400
+                    message: Quantity must be a non-negative integer
+                    
+      security:
+        - bearerAuth: []
+  
+  /api/v1/books/search/{searchText}:
+    get:
+      summary: Search for books by title, author, or ISBN
+      operationId: searchBooks
+      tags:
+        - Books
+      parameters:
+        - name: searchText
+          in: path
+          required: true
+          description: The text to search for in book titles, authors, or ISBNs
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully retrieved books matching the search criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    Id:
+                      type: integer
+                    title:
+                      type: string
+                    author:
+                      type: string
+                    ISBN:
+                      type: string
+                    quantity:
+                      type: integer
+                    shelfLocation:
+                      type: string
+                    createdAt:
+                      type: string
+                      format: date-time
+                    updatedAt:
+                      type: string
+                      format: date-time
+        '400':
+          description: Invalid Token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: Access Denied No Token Provided
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: No books found matching the search criteria
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  statusCode:
+                    type: integer
+                  message:
+                    type: string
+      security:
+        - bearerAuth: []
+  
+  /api/v1/Borrowers:
+    get:
+      summary: Retrieve a list of borrowers
+      operationId: getBorrowers
+      tags:
+        - Borrowers
+      responses:
+        '200':
+          description: Successfully retrieved a list of borrowers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    Id:
+                      type: integer
+                    name:
+                      type: string
+                    email:
+                      type: string
+                      format: email
+                    password:
+                      type: string
+                      description: Hashed password
+                    registerDate:
+                      type: string
+                      format: date-time
+                    createdAt:
+                      type: string
+                      format: date-time
+                    updatedAt:
+                      type: string
+                      format: date-time
+        '400':
+          description: Invalid Token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: Access Denied No Token Provided
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+      security:
+        - bearerAuth: []
+  
+  /api/v1/Borrowers/{id}:
+    put:
+      summary: Update a borrower by ID
+      operationId: updateBorrowerById
+      tags:
+        - Borrowers
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the borrower to update
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Successfully updated the borrower
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Id:
+                    type: integer
+                  name:
+                    type: string
+                  email:
+                    type: string
+                    format: email
+                  password:
+                    type: string
+                    description: Hashed password
+                  registerDate:
+                    type: string
+                    format: date-time
+                  createdAt:
+                    type: string
+                    format: date-time
+                  updatedAt:
+                    type: string
+                    format: date-time
+        '400':
+          description: Invalid Token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: Access Denied No Token Provided
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: Borrower not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  statusCode:
+                    type: integer
+                  message:
+                    type: string
+      security:
+        - bearerAuth: []
+    
+    delete:
+      summary: Delete a borrower by ID
+      operationId: deleteBorrowerById
+      tags:
+        - Borrowers
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the borrower to delete
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully deleted the borrower
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Id:
+                    type: integer
+                  name:
+                    type: string
+                  email:
+                    type: string
+                    format: email
+                  password:
+                    type: string
+                    description: Hashed password
+                  registerDate:
+                    type: string
+                    format: date-time
+                  createdAt:
+                    type: string
+                    format: date-time
+                  updatedAt:
+                    type: string
+        '400':
+          description: Invalid Token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: Access Denied No Token Provided
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: Borrower not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  statusCode:
+                    type: integer
+                  message:
+                    type: string
+      security:
+        - bearerAuth: []
+  
+  /api/v1/Borrowers/register:
+    post:
+      summary: Register a new borrower
+      operationId: registerBorrower
+      tags:
+        - Borrowers
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  minLength: 8
+      responses:
+        '201':
+          description: Successfully created a new borrower
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Id:
+                    type: integer
+                  name:
+                    type: string
+                  email:
+                    type: string
+                    format: email
+                  password:
+                    type: string
+                    description: Hashed password
+                  registerDate:
+                    type: string
+                    format: date-time
+                  updatedAt:
+                    type: string
+                    format: date-time
+                  createdAt:
+                    type: string
+                    format: date-time
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  statusCode:
+                    type: integer
+                  message:
+                    type: string      
+
+  /api/v1/Borrowers/auth:
+    post:
+      summary: Authenticate a borrower
+      operationId: authenticateBorrower
+      tags:
+        - Borrowers
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  minLength: 8
+      responses:
+        '200':
+          description: Successfully authenticated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  borrower:
+                    type: object
+                    properties:
+                      Id:
+                        type: integer
+                      name:
+                        type: string
+                      email:
+                        type: string
+                        format: email
+                      password:
+                        type: string
+                        description: Hashed password
+                      registerDate:
+                        type: string
+                        format: date-time
+                      createdAt:
+                        type: string
+                        format: date-time
+                      updatedAt:
+                        type: string
+                        format: date-time
+                  token:
+                    type: string
+                    description: JWT token for authentication
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  statusCode:
+                    type: integer
+                  message:
+                    type: string
+  
+  /api/v1/borrowerBooks/checkout:
+    post:
+      summary: Checkout a book for a borrower
+      operationId: checkoutBook
+      tags:
+        - BorrowerBook  
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                borrowerId:
+                  type: integer
+                bookId:
+                  type: integer
+                dueDate:
+                  type: string
+                  format: date-time
+      responses:
+        '200':
+          description: Successfully checked out the book
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  borrowerId:
+                    type: integer
+                  bookId:
+                    type: integer
+                  dueDate:
+                    type: string
+                    format: date-time
+                  returned:
+                    type: boolean
+        '400':
+          description: Invalid Token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: Access Denied No Token Provided
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: Book not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  statusCode:
+                    type: integer
+                  message:
+                    type: string   
+    
+      security:
+        - bearerAuth: []
+  
+  /api/v1/borrowerBooks/return:
+    post:
+      summary: Return a book for a borrower
+      operationId: returnBook
+      tags:
+        - BorrowerBook
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                borrowerId:
+                  type: integer
+                bookId:
+                  type: integer
+      responses:
+        '200':
+          description: Successfully returned the book
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  borrowerId:
+                    type: integer
+                  bookId:
+                    type: integer
+                  dueDate:
+                    type: string
+                    format: date-time
+                  returned:
+                    type: boolean
+        '400':
+          description: Invalid Token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: Access Denied No Token Provided
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: Book not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  statusCode:
+                    type: integer
+                  message:
+                    type: string
+                    
+      security:
+        - bearerAuth: []
+  
+  /api/v1/borrowerBooks/overdue:
+    get:
+      summary: Get a list of overdue books for borrowers
+      operationId: getOverdueBooks
+      tags:
+        - BorrowerBook
+      responses:
+        '200':
+          description: Successfully retrieved overdue books
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    borrowerId:
+                      type: integer
+                    bookId:
+                      type: integer
+                    dueDate:
+                      type: string
+                      format: date-time
+                    returned:
+                      type: boolean
+        '400':
+          description: Invalid Token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: Access Denied No Token Provided
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                          
+      security:
+        - bearerAuth: []
+  
+  /api/v1/borrowerBooks/{id}:
+    get:
+      summary: Get books checked out by a specific borrower
+      operationId: getBooksByBorrowerId
+      tags:
+        - BorrowerBook
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the borrower
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully retrieved books for the borrower
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    borrowerId:
+                      type: integer
+                    bookId:
+                      type: integer
+                    dueDate:
+                      type: string
+                      format: date-time
+                    returned:
+                      type: boolean
+        '400':
+          description: Invalid Token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: Access Denied No Token Provided
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+      
+      security:
+        - bearerAuth: []
+  
+  /api/v1/borrowerbooks/processes:
+    get:
+      summary: Retrieve Borrower Book Processes
+      description: Returns a CSV file containing borrower book processes, including borrowerId, bookId, dueDate, returned, and createdAt fields.
+      tags:
+        - BorrowerBook
+      responses:
+        '200':
+          description: Successful retrieval of borrower book processes.
+          content:
+            text/csv:
+              schema:
+                type: string
+                format: binary
+              example: |
+                borrowerId,bookId,dueDate,returned,createdAt
+                2,1,"2024-10-02T01:05:01.000Z",false,"2024-10-06T09:20:44.000Z"
+                2,4,"2024-10-10T01:05:01.000Z",false,"2024-10-06T09:20:57.000Z"
+        '400':
+          description: Invalid Token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Invalid Token
+        '401':
+          description: Access Denied No Token Provided
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Access Denied No Token Provided
+      
+      security:
+        - bearerAuth: []              
+  
+  /api/v1/borrowerbooks/overdue-processes:
+    get:
+      summary: Retrieve Overdue Borrower Book Processes
+      description: Returns a CSV file containing overdue borrower book processes.
+      tags:
+        - BorrowerBook
+      responses:
+        '200':
+          description: Successful retrieval of overdue borrower book processes.
+          content:
+            text/csv:
+              schema:
+                type: string
+                format: binary
+              example: |
+                borrowerId,bookId,dueDate,returned,createdAt
+                2,1,"2024-10-02T01:05:01.000Z",false,"2024-10-06T09:20:44.000Z"
+        '400':
+          description: Invalid Token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Invalid Token
+        '401':
+          description: Access Denied No Token Provided
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Access Denied No Token Provided
+      
+      security:
+        - bearerAuth: []
+        
+  /api/v1/users/add_user:
+    post:
+      summary: Add a new user
+      operationId: addUser
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '201':
+          description: User successfully created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Id:
+                    type: integer
+                  username:
+                    type: string
+                  password:
+                    type: string
+                  userType:
+                    type: string
+                  updatedAt:
+                    type: string
+                    format: date-time
+                  createdAt:
+                    type: string
+                    format: date-time
+        '400':
+          description: Invalid Token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: Access Denied No Token Provided
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              
+      security:
+        - bearerAuth: []
+
+  /api/v1/users/auth:
+    post:
+      summary: Authenticate a user
+      operationId: authenticateUser
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: User successfully authenticated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      Id:
+                        type: integer
+                      userType:
+                        type: string
+                      username:
+                        type: string
+                      password:
+                        type: string
+                      createdAt:
+                        type: string
+                        format: date-time
+                      updatedAt:
+                        type: string
+                        format: date-time
+                  token:
+                    type: string
+        '401':
+          description: Invalid email or password
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  statusCode:
+                    type: integer
+                  message:
+                    type: string
+                    
+                    
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+tags:
+  - name: Books
+  - name: Borrowers
+  - name: BorrowerBook
+  - name: Users
